@@ -1,0 +1,46 @@
+name: Reusable App CI
+
+on:
+  workflow_call:
+    inputs:
+      go-version:
+        type: string
+        default: "1.23"
+      project-name:
+        type: string
+        required: true
+      service-name:
+        type: string
+        required: true
+      image-tag:
+        type: string
+        required: true
+      push-image:
+        type: boolean
+        default: false
+    secrets:
+      REGISTRY_TOKEN:
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and test
+        uses: ./.github/actions/build-app
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Docker build and push
+        uses: ./.github/actions/docker-build-push
+        with:
+          image-name: ${{ inputs.project-name }}/${{ inputs.service-name }}
+          image-tag: ${{ inputs.image-tag }}
+          push: ${{ inputs.push-image }}
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.REGISTRY_TOKEN || secrets.GITHUB_TOKEN }}

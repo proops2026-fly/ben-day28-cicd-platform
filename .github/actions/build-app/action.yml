@@ -1,0 +1,36 @@
+name: "Build App"
+description: "Setup Go, download dependencies, lint and test"
+
+inputs:
+  go-version:
+    description: "Go version"
+    required: false
+    default: "1.23"
+  working-directory:
+    description: "Directory to run the build in"
+    required: false
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ inputs.go-version }}
+        cache: true
+
+    - name: Download dependencies
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: go mod download
+
+    - name: Lint
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: go vet ./...
+
+    - name: Test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: go test $(go list ./... | grep -v "tests/integration" | grep -v "internal/handlers")
