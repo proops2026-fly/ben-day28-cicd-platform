@@ -33,4 +33,4 @@ runs:
     - name: Test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: go test $(go list ./... | grep -v "tests/integration" | grep -v "internal/handlers")
+      run: go test $(go list ./... | grep -v "tests/integration" | grep -v "internal/handlers") -coverprofile=coverage.out

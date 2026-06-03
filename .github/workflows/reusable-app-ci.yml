@@ -21,6 +21,8 @@ on:
     secrets:
       REGISTRY_TOKEN:
         required: false
+      SONAR_TOKEN:
+        required: false
 
 jobs:
   build:
@@ -30,7 +32,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
       - name: Build and test
         uses: ./.github/actions/build-app
         with:
@@ -44,3 +47,9 @@ jobs:
           push: ${{ inputs.push-image }}
           registry-username: ${{ github.actor }}
           registry-password: ${{ secrets.REGISTRY_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -1,0 +1,39 @@
+name: Reusable IaC CI
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        type: string
+        default: "iac"
+      apply:
+        type: boolean
+        default: false
+    secrets:
+      TF_TOKEN:
+        required: false
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        if: inputs.apply == true
+        run: terraform apply -auto-approve
