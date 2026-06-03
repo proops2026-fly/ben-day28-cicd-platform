@@ -36,12 +36,12 @@ jobs:
           fetch-depth: 0
 
       - name: Build and test
-        uses: ./.github/actions/build-node-app
+        uses: proops2026-fly/ben-day28-cicd-platform/.github/actions/build-node-app@v1
         with:
           node-version: ${{ inputs.node-version }}
 
       - name: Docker build and push
-        uses: ./.github/actions/docker-build-push
+        uses: proops2026-fly/ben-day28-cicd-platform/.github/actions/docker-build-push@v1
         with:
           image-name: ${{ inputs.project-name }}/${{ inputs.service-name }}
           image-tag: ${{ inputs.image-tag }}
