@@ -18,6 +18,9 @@ on:
       push-image:
         type: boolean
         default: false
+      sonar-enabled:
+        type: boolean
+        default: true
     secrets:
       REGISTRY_TOKEN:
         required: false
@@ -50,6 +53,7 @@ jobs:
           registry-password: ${{ secrets.REGISTRY_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: SonarCloud Scan
+        if: ${{ inputs.sonar-enabled }}
         uses: SonarSource/sonarcloud-github-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
