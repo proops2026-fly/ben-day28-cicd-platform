@@ -15,9 +15,9 @@ on:
       service-name:
         type: string
         required: true
-    secrets:
-      KUBE_CONFIG_DATA:
-        required: true
+    # secrets:
+    #   KUBE_CONFIG_DATA:
+    #     required: true
 
 jobs:
   deploy:
