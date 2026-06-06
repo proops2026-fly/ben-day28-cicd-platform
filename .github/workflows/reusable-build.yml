@@ -1,0 +1,43 @@
+name: Reusable Build Workflow
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        type: string
+        required: true
+      service-name:
+        type: string
+        required: true
+    outputs:
+      image-tag:
+        description: "Commit SHA used as the image tag"
+        value: ${{ jobs.build.outputs.image-tag }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.set-tag.outputs.tag }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build and test
+        uses: ./.github/actions/build-app
+
+      - id: set-tag
+        run: echo "tag=${{ github.sha }}" >> $GITHUB_OUTPUT
+
+      - name: Docker build and push
+        uses: ./.github/actions/docker-build-push
+        with:
+          image-name: ${{ inputs.project-name }}/${{ inputs.service-name }}
+          image-tag: ${{ steps.set-tag.outputs.tag }}
+          push: "true"
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+
