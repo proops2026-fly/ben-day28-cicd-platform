@@ -8,23 +8,9 @@ on:
       service-name:
         type: string
         required: true
-    outputs:
-      image-tag:
-        description: "Commit SHA used as the image tag"
-        value: ${{ jobs.build.outputs.image-tag }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      image-tag: ${{ steps.set-tag.outputs.tag }}
-    permissions:
-      contents: read
-      packages: write
     steps:
-      - id: set-tag
-        run: echo "tag=${{ github.sha }}" >> $GITHUB_OUTPUT
-
-      - name: Placeholder build
-        run: echo "build step — image ${{ inputs.project-name }}/${{ inputs.service-name }}:${{ steps.set-tag.outputs.tag }}"
+      - run: echo "build placeholder"
 
