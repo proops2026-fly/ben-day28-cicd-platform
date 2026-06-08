@@ -27,13 +27,15 @@ jobs:
           fetch-depth: 0
 
       - name: Build and test
-        uses: ./.github/actions/build-app
+        # uses: ./.github/actions/build-app - this is the old way of referencing a local action, but it doesn't work in reusable workflows
+        uses: proops2026-fly/ben-day28-cicd-platform/.github/actions/build-app@v2
 
       - id: set-tag
         run: echo "tag=${{ github.sha }}" >> $GITHUB_OUTPUT
 
       - name: Docker build and push
-        uses: ./.github/actions/docker-build-push
+        # uses: ./.github/actions/docker-build-push - this is the old way of referencing a local action, but it doesn't work in reusable workflows
+        uses: proops2026-fly/ben-day28-cicd-platform/.github/actions/docker-build-push@v2
         with:
           image-name: ${{ inputs.project-name }}/${{ inputs.service-name }}
           image-tag: ${{ steps.set-tag.outputs.tag }}
