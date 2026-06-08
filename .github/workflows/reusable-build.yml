@@ -16,18 +16,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     outputs:
       image-tag: ${{ steps.set-tag.outputs.tag }}
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-          cache: true
+      - name: Checkout
+        run: |
+          git clone https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git .
+          git checkout ${{ github.sha }}
 
       - name: Vet
         run: go vet ./...
