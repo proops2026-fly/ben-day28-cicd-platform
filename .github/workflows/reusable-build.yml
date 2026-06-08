@@ -25,18 +25,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Build and test
-        uses: proops2026-fly/ben-day28-cicd-platform/.github/actions/build-app@v2
-
       - id: set-tag
         run: echo "tag=${{ github.sha }}" >> $GITHUB_OUTPUT
-
-      - name: Docker build and push
-        uses: proops2026-fly/ben-day28-cicd-platform/.github/actions/docker-build-push@v2
-        with:
-          image-name: ${{ inputs.project-name }}/${{ inputs.service-name }}
-          image-tag: ${{ steps.set-tag.outputs.tag }}
-          push: "true"
-          registry-username: ${{ github.actor }}
-          registry-password: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo "build placeholder"
