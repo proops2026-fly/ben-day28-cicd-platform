@@ -8,6 +8,10 @@ on:
       service-name:
         type: string
         required: true
+    outputs:
+      image-tag:
+        description: "Commit SHA used as the image tag"
+        value: ${{ jobs.build.outputs.image-tag }}
 jobs:
   build:
     runs-on: ubuntu-latest
