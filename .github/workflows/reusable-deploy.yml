@@ -24,8 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v4
-
       - name: Deploy ${{ inputs.environment }} (image @ ${{ inputs.image-tag }})
         run: |
           echo "Deploying ${{ inputs.service-name }} to ${{ inputs.environment }}"
