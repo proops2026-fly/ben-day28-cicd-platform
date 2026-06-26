@@ -1,0 +1,31 @@
+name: Reusable Deploy
+
+on:
+  workflow_call:
+    inputs:
+      image-tag:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+      project-name:
+        type: string
+        required: true
+      service-name:
+        type: string
+        required: true
+    # secrets:
+    #   KUBE_CONFIG_DATA:
+    #     required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Deploy ${{ inputs.environment }} (image @ ${{ inputs.image-tag }})
+        run: |
+          echo "Deploying ${{ inputs.service-name }} to ${{ inputs.environment }}"
+          echo "Image: ghcr.io/${{ inputs.project-name }}/${{ inputs.service-name }}:${{ inputs.image-tag }}"
+          echo "KUBE_CONFIG_DATA is set: ${{ secrets.KUBE_CONFIG_DATA != '' }}"
